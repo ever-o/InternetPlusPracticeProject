@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Input, Button, Table, Spin, Alert, Modal, Layout } from 'antd';
 import { Content, Header } from 'antd/es/layout/layout';
 import './index.scss'
+import { getContent, getInfo } from '../../api/main';
 
 const Main = () => {
   const [inputText, setInputText] = useState('');
@@ -12,28 +13,33 @@ const Main = () => {
   const [analysisResult, setAnalysisResult] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState('');
+  const [modalTitle, setModalTitle] = React.useState('')
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
   };
 
-  const handleAnalysis = () => {
+  const handleAnalysis = async () => {
     setLoading(true);
     setError(null);
 
     // 模拟后端请求和结果
-    setTimeout(() => {
-      const mockResult = [
-        { id: 1, title: 'Item 1', indexOne: 'Indicator A', indexTwo: 'Indicator B' },
-        { id: 2, title: 'Item 2', indexOne: 'Indicator C', indexTwo: 'Indicator D' },
-      ];
-      setLoading(false);
-      setAnalysisResult(mockResult);
-    }, 2000);
+    // todo1: 修改为实际接口获取的数据
+    // const result = await getInfo()
+    const result = [
+      { id: 1, title: 'Item 1', indexOne: 'Indicator A', indexTwo: 'Indicator B' },
+      { id: 2, title: 'Item 2', indexOne: 'Indicator C', indexTwo: 'Indicator D' },
+    ];
+    setLoading(false);
+    setAnalysisResult(result);
   };
 
-  const handleTitleClick = (text) => {
-    setModalContent(`这是标题为 ${text} 的弹窗内容。`);
+  const handleTitleClick = async (text, record) => {
+    setModalTitle(text)
+    // todo2: 修改为实际后端接口返回的数据
+    // const content = await getContent({ id: record.id })
+    const content = `这是标题为 ${text} 的弹窗内容。`
+    setModalContent(content);
     setModalVisible(true);
   };
 
@@ -47,8 +53,8 @@ const Main = () => {
       title: '标题',
       dataIndex: 'title',
       key: 'title',
-      render: (text) => (
-        <a onClick={() => handleTitleClick(text)}>{text}</a>
+      render: (text, record) => (
+        <a onClick={() => handleTitleClick(text, record)}>{text}</a>
       ),
     },
     {
@@ -110,7 +116,7 @@ const Main = () => {
           />
         </div>
         <Modal
-          title="弹窗标题"
+          title={modalTitle}
           open={modalVisible}
           onCancel={() => setModalVisible(false)}
           footer={null}
