@@ -25,20 +25,20 @@ const Main = () => {
 
     // 模拟后端请求和结果
     // todo1: 修改为实际接口获取的数据
-    // const result = await getInfo()
-    const result = [
-      { id: 1, title: 'Item 1', indexOne: 'Indicator A', indexTwo: 'Indicator B' },
-      { id: 2, title: 'Item 2', indexOne: 'Indicator C', indexTwo: 'Indicator D' },
-    ];
+    const { info: result } = await getInfo({ content: inputText })
+    console.log(result)
+    // const result = [
+    //   { id: 1, title: 'Item 1', similarity: 'Indicator A' },
+    //   { id: 2, title: 'Item 2', similarity: 'Indicator C' },
+    // ];
     setLoading(false);
     setAnalysisResult(result);
   };
 
   const handleTitleClick = async (text, record) => {
     setModalTitle(text)
-    // todo2: 修改为实际后端接口返回的数据
-    // const content = await getContent({ id: record.id })
-    const content = `这是标题为 ${text} 的弹窗内容。`
+    const { content, title } = await getContent(record.id)
+    title && setModalTitle(title)
     setModalContent(content);
     setModalVisible(true);
   };
@@ -58,14 +58,9 @@ const Main = () => {
       ),
     },
     {
-      title: '指标1',
-      dataIndex: 'indexOne',
-      key: 'indexOne',
-    },
-    {
-      title: '指标2',
-      dataIndex: 'indexTwo',
-      key: 'indexTwo',
+      title: '相似度',
+      dataIndex: 'similarity',
+      key: 'similarity',
     },
   ];
 
@@ -120,6 +115,7 @@ const Main = () => {
           open={modalVisible}
           onCancel={() => setModalVisible(false)}
           footer={null}
+          width={"70vw"}
         >
           {modalContent}
         </Modal>

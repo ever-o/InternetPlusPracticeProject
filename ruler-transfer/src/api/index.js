@@ -1,4 +1,4 @@
-const baseUrl = ''
+const baseUrl = 'http://127.0.0.1:5050'
 
 // url 是资源地址，args是资源配置，包括method，body等
 export const fetcher = async (path, args) => {

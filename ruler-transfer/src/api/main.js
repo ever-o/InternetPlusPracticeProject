@@ -1,5 +1,5 @@
 import { GET, POST } from "./index";
 
-export const getInfo = async () => GET('mockUrl1')
+export const getInfo = async (params) => POST('/getInfo', params)
 
-export const getContent = async (searchParams) => POST('mockUrl2', searchParams)
+export const getContent = async (id) => GET(`/getContent?id=${id}`)
